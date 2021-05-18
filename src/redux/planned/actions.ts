@@ -1,7 +1,7 @@
 const actions = {
     GET_PLANNER: 'planner/GET_PLANNER',
     SET_PLANNER: 'planner/SET_PLANNER',
-
+    REMOVE_PLANNER: 'planner/REMOVE_PLANNER',
     SET_INITIAL: 'planner/SET_INITIAL',
 };
 

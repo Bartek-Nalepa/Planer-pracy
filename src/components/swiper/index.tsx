@@ -1,16 +1,36 @@
 import React, { useEffect, useState } from "react"
 import moment from "moment"
+import {compose} from "recompose";
 import style from "./index.module.scss"
+import {connect} from "react-redux"
 import { SwiperPropsType } from "./index.type"
 import { momentFormat } from "../../config/ENV_CON"
+import Modal from "../modal"
+import { PlannedType } from "../../redux/planned/planned.type"
+import { ReducerType } from "../../redux/reducer.type"
 
 function Swiper(props: SwiperPropsType) {
 
-    const {getCurrentDay, setCurrentDay} = props
+    const {getCurrentDay, setCurrentDay, planned} = props
+    const [getModalVisible, setModalVisible] = useState<boolean>(false)
+    const [getModalDetails, setModalDetails] = useState<PlannedType>()
+    const [getClickedDay, setClickedDay] = useState<string>('')
     const [getDays, setDays] = useState<any>()
+
     useEffect(() => {
         generateDays()
     }, [])
+
+    const setDetails = (e:any) => {
+        const day: string = e.currentTarget.getAttribute("day")
+        setClickedDay(day)
+        setModalDetails(
+            planned.find((item: PlannedType) => {
+                return item.date === day
+            })
+        )
+        setModalVisible(true)
+    }
 
     function swipeLeft(){ // CLICK RIGHT
         const container = document.getElementById("sliderContainer")
@@ -38,12 +58,14 @@ function Swiper(props: SwiperPropsType) {
         rightVoid?.classList.add("rightImage");
         rightVoid?.classList.remove("rightVoidImage")
         rightVoid?.setAttribute("id","right")
-
         let div = document.createElement("div")
         div.id = "rightVoid"
         div.className = "rightVoidImage"
+        div.setAttribute("day", `${moment(getCurrentDay, momentFormat).add(3,"days").format(momentFormat)}`)
         container?.appendChild(div)
+        div.onclick = (e:any) => setDetails(e)
     }
+
     function swipeRight(){ // CLICK LEFT
         const container = document.getElementById("sliderContainer")
         const leftVoid = document.getElementById("leftVoid")
@@ -74,6 +96,8 @@ function Swiper(props: SwiperPropsType) {
         let div = document.createElement("div")
         div.id = "leftVoid"
         div.className = "leftVoidImage"
+        div.setAttribute("day", `${moment(getCurrentDay, momentFormat).subtract(3,"days").format(momentFormat)}`)
+        div.onclick = (e:any) => setDetails(e)
         container?.appendChild(div)
     }
 
@@ -124,18 +148,38 @@ function Swiper(props: SwiperPropsType) {
         )
     }
 
-    return(
-       <div id={"sliderContainer"} className={style.sliderContainer}>
-          {getDays}
-        <button onClick={swipeRight}>
-            LEFT
-          </button>
-          <button onClick={swipeLeft}>
-            RIGHT
-          </button>
 
-        </div>
+
+    return(
+        <>
+            {
+                getModalVisible && 
+                    <Modal
+                        getModalVisible={getModalVisible}
+                        setModalVisible={setModalVisible}   
+                        getModalDetails={getModalDetails}
+                        getClickedDay={getClickedDay}           
+                    />
+            }
+            
+            <div id={"sliderContainer"} className={style.sliderContainer}>
+                {getDays}
+                <button onClick={swipeRight}>
+                 LEFT
+                </button>
+                <button onClick={swipeLeft}>
+                    RIGHT
+                </button> 
+            </div>
+        </>
     )
 }
 
-export default Swiper
+const mapStateToProps = (state:ReducerType) => ({
+    planned: state.planned
+})
+
+
+export default compose<SwiperPropsType,any>(
+    connect(mapStateToProps),
+  )(Swiper)

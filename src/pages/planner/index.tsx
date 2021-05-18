@@ -10,13 +10,12 @@ import Swiper from "../../components/swiper"
 import {momentFormat} from "../../config/ENV_CON"
 
 function Planned(props:PlannerPropsType) {
-  const {dispatch} = props
+  const {dispatch, planned} = props
 
   const [getCurrentDay, setCurrentDay] = useState<string>(moment().format(momentFormat))
 
-  function generateDays(){
-    // const container = document.getElementById("sliderContainer")
-  }
+  useEffect(() => {console.log(props, "props", planned, "planned" )}, [planned])
+  // localStorage.removeItem("planned")
 
   return(
     <div className={style.container}>
