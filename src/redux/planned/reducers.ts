@@ -27,7 +27,7 @@ export default function plannedReducer(state = [], action: {type: string; payloa
                 return el.date === action.payload.date
             })
 
-            if (newNode != -1 && newNode >= 0) {
+            if (newNode !== -1 && newNode >= 0) {
                 localStorage.setItem("planned", JSON.stringify(updatePlannedObjectInArray(state, newNode, action.payload)))
                 return updatePlannedObjectInArray(state, newNode, action.payload)
             } 
