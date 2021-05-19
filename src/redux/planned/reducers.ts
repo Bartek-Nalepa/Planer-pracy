@@ -97,8 +97,27 @@ export default function plannedReducer(state = [], action: {type: string; payloa
                 return insertPlannedItem(state, action.payload)
             }
         case actions.SET_COLOR:
-            
-            return {...state}
+            const newNode2: any = state.findIndex((el:PlannedType) => {
+                return el.date === action.payload.date
+            })
+            if (newNode2 !== -1 && newNode2 >= 0) {
+                const nwArray:any = state.map((item:any, index:number) => {
+                    if (index !== newNode2) return item
+                    return {
+                        ...item,
+                        color: action.payload.color,
+                        planned: [
+                            ...item.planned
+                        ]
+                    }
+                })
+                localStorage.setItem("planned", JSON.stringify(nwArray))
+                return [...nwArray]
+            }
+            else {
+                localStorage.setItem("planned", JSON.stringify(insertPlannedItem(state, action.payload)))
+                return insertPlannedItem(state, action.payload)
+            }
         case actions.SET_INITIAL:
             const obj = JSON.parse(action.payload)
             return obj ? [...state, ...obj] : state

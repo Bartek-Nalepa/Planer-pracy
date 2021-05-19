@@ -25,10 +25,11 @@ function Swiper(props: SwiperPropsType) {
         generateDays()
     }, [])
 
-    // "Update Card with new ul"
+    // "Update Card with new view"
     useEffect(() => {
         planned.find((element: PlannedType) => element.date === getClickedDay)
         const el = document?.getElementById(`${getClickedId}`)
+        const triangle = el?.getElementsByClassName("triangle")[0]
         el?.getElementsByTagName("ul")[0]?.remove()
 
         let ul = document.createElement("ul")
@@ -41,6 +42,9 @@ function Swiper(props: SwiperPropsType) {
             ul.append(li)
         });
         el?.append(ul)
+        //@ts-ignore
+        if (triangle) triangle.style.borderTopColor = `${lis?.color}` || "transparent"
+
     }, [planned])
 
     const setDetails = (e:any) => {
@@ -93,6 +97,8 @@ function Swiper(props: SwiperPropsType) {
         let h2 = document.createElement('h2')
         let hr = document.createElement("hr")
         let ul = document.createElement("ul")
+        let triangle = document.createElement("div")
+
         const lis:PlannedType|undefined = planned?.find((item: PlannedType) => {
             return item.date === moment(getCurrentDay,momentFormat).add(3, "days").format(momentFormat)
         })
@@ -103,11 +109,13 @@ function Swiper(props: SwiperPropsType) {
             ul.append(li)
         });
         ul.classList.add("smallerCardList")
+        triangle.classList.add("triangle")
+        triangle.style.borderTopColor = `${lis?.color || "transparent"}`
         div.id = "rightVoid"
         div.className = "rightVoidImage"
         div.setAttribute("day", `${moment(getCurrentDay, momentFormat).add(3,"days").format(momentFormat)}`)
         div.onclick = (e:any) => setDetails(e)
-        div.append(h2,hr, ul)
+        div.append(triangle, h2,hr, ul)
         container?.appendChild(div)
         
     }
@@ -123,23 +131,18 @@ function Swiper(props: SwiperPropsType) {
         const centerList = center?.getElementsByTagName('ul')[0];
         setCurrentDay(moment(getCurrentDay, momentFormat).subtract(1, 'days').format(momentFormat))
         rightVoid?.remove()
-        
         leftVoid?.classList.add("leftImage");
         leftVoid?.classList.remove("leftVoidImage")
         leftVoid?.setAttribute("id","left")
-
         left?.classList.add("centerImage")
         left?.classList.remove("leftImage")
         left?.setAttribute("id","center")
-
         center?.classList.add("rightImage")
         center?.classList.remove("centerImage")
         center?.setAttribute("id","right")
-
         right?.classList.add("rightVoidImage");
         right?.classList.remove("rightImage")
         right?.setAttribute("id","rightVoid")
-
         leftList?.classList.add("cardList")
         leftList?.classList.remove("smallerCardList")
         centerList?.classList.add("smallerCardList")
@@ -149,6 +152,7 @@ function Swiper(props: SwiperPropsType) {
         let h2 = document.createElement('h2')
         let hr = document.createElement("hr")
         let ul = document.createElement("ul")
+        let triangle = document.createElement("div")
         const lis:PlannedType|undefined = planned?.find((item: PlannedType) => {
             return item.date === moment(getCurrentDay,momentFormat).subtract(3, "days").format(momentFormat)
         })
@@ -159,11 +163,14 @@ function Swiper(props: SwiperPropsType) {
             ul.append(li)
         });
         ul.classList.add("smallerCardList")
+        triangle.classList.add("triangle")
+        triangle.style.borderTopColor = `${lis?.color || "transparent"}`
+        console.log(triangle)
         div.id = "leftVoid"
         div.className = "leftVoidImage"
         div.setAttribute("day", `${moment(getCurrentDay, momentFormat).subtract(3,"days").format(momentFormat)}`)
         div.onclick = (e:any) => setDetails(e)
-        div.append(h2,hr, ul)
+        div.append(triangle, h2, hr, ul)
 
 
         container?.appendChild(div)
@@ -224,6 +231,7 @@ function Swiper(props: SwiperPropsType) {
                     className={`${classNames(index)}`}
                     onClick={(e:any) => {setDetails(e)}}    
                 >
+                    <div style={lis?.color ? {borderTopColor: `${lis?.color}`}:{borderTopColor: "transparent"}} className={"triangle"} />
                     <h2>{item}</h2>
                     <hr/ >
                     <ul className={`${listClassNames(index)}`}>

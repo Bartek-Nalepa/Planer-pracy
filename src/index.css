@@ -180,3 +180,13 @@ h2{
   font-size: 9px;
   transition: all 0.5s;
 }
+
+
+.triangle {
+  width: 0;
+  position: absolute;
+  height: 0;
+  right: 0;
+  border-top: 85px solid transparent;
+  border-left: 85px solid transparent;
+}

@@ -86,9 +86,10 @@ const Modal = (props:ModalPropsType) => {
     const setColor = (e:any) => {
        clearTimeout(timer)
        timer = setTimeout(() => {
-        dispatch({
+       dispatch({
             type:actions.SET_COLOR,
             payload: {
+                date: getClickedDay,
                 color: e.target.value
             }
         })
