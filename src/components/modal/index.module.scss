@@ -153,3 +153,63 @@ input::-webkit-inner-spin-button {
   display: flex;
   justify-content: center;
 }
+
+.flexRowBet {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: wrap row;
+  align-items: center;
+
+  input[type="checkbox"] {
+    margin-right: 16px;
+    cursor: pointer;
+    &:checked {
+      margin-right: 16px;
+      background-color: #6200ee;
+    }
+  }
+}
+
+.buttonFilled {
+  cursor: pointer;
+  color: white;
+  opacity: 0.88;
+  border: none;
+  background-color: #6200ee;
+  height: 36px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: Roboto, sans-serif;
+  letter-spacing: 1px;
+  border-radius: 4px;
+}
+
+.btn {
+  cursor: pointer;
+  color: #6200ee;
+  opacity: 0.88;
+  border: none;
+  background-color: transparent;
+  height: 36px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: Roboto, sans-serif;
+  letter-spacing: 1px;
+  &:hover {
+    background-color: lighten(#6200ee, 50);
+  }
+}
+
+@media screen and (max-width: 745px) {
+  .modalContainer {
+    width: 95vw;
+    left: 2.5vw;
+    right: 2.5vw;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .flexRowBet {
+    justify-content: space-around;
+  }
+}

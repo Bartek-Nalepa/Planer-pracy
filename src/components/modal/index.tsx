@@ -4,11 +4,10 @@ import style from "./index.module.scss"
 import {ModalPropsType} from "./index.type" 
 import SmallModal from "./smallModal"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faTrash} from "@fortawesome/free-solid-svg-icons"
+import {faBed, faTrash} from "@fortawesome/free-solid-svg-icons"
 import actions from "../../redux/planned/actions" 
 import {compose} from "recompose"
 import {connect} from "react-redux"
-import { statements } from "@babel/template"
 import { ReducerType } from "../../redux/reducer.type"
 
 const Modal = (props:ModalPropsType) => {
@@ -19,7 +18,7 @@ const Modal = (props:ModalPropsType) => {
 
     useEffect(() => {
         setPlanned(planned.find((item: any) => {
-            return item.date === getModalDetails?.date
+            return item.date === getClickedDay
         }))
     }, [planned])
 
@@ -28,6 +27,15 @@ const Modal = (props:ModalPropsType) => {
         type: actions.REMOVE_PLANNER,
         payload: id
     })
+    const setDayOff = (date: string, dayOff:boolean) => {
+        dispatch({
+            type: actions.SET_DAYOFF,
+            payload: {
+                date,
+                dayOff
+            }
+        })
+    }
     const generatePlannedEvents = () => {
         const generateSingleEvent = (item:SingleEventPlanned[]) => {
             return item.map((el:SingleEventPlanned) => {
@@ -56,14 +64,35 @@ const Modal = (props:ModalPropsType) => {
         }
     }
     const generateBottomButtons = () => {
-        return <div className={style.bottomContainer}>
-            <button onClick={() => setVisibleSmallModal(true)}>
-                Dodaj
+        return <div className={style.flexRowBet}>
+            <button 
+                style={{marginLeft: "8px"}} 
+                className={getPlanned?.dayOff ? style.buttonFilled : style.btn}
+                onClick={() => setDayOff(getClickedDay, !getPlanned?.dayOff )}>
+                {getPlanned?.dayOff ? 'Usuń wolny dzień' : "Ustaw wolny dzień" }
             </button>
-            <button onClick={disableModal}>
-                Zamknij
-            </button>
+            <input type={"color"} onChange={(e:any) => setColor(e)}/>
+            <div className={style.bottomContainer}>
+                <button onClick={() => setVisibleSmallModal(true)}>
+                    Dodaj
+                </button>
+                <button onClick={disableModal}>
+                    Zamknij
+                </button>
+            </div>
         </div>
+    }
+    let timer: any
+    const setColor = (e:any) => {
+       clearTimeout(timer)
+       timer = setTimeout(() => {
+        dispatch({
+            type:actions.SET_COLOR,
+            payload: {
+                color: e.target.value
+            }
+        })
+    }, 500);
     }
     return (
         <>

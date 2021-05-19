@@ -1,8 +1,9 @@
 .container {
-  width: 70vw;
+  // width: 70vw;
   margin: auto;
+  padding-top: 200px;
   min-height: 100vh;
-  background-color: rgb(196, 196, 196);
+  background-color: #fafafa;
 }
 
 .leftImage {
@@ -22,15 +23,18 @@
   height: 400px;
   width: 400px;
   position: absolute;
-  background-color: rgb(155, 106, 106);
+  background-color: white;
   left: -webkit-calc(50% - 200px);
   left: -moz-calc(50% - 200px);
   left: calc(50% - 200px);
   z-index: 5;
   transition: all 1s;
 
-  //   right: calc(50%-200px);
+  box-shadow: 0 0 8px 0 rgb(0 0 0 / 8%), 0 0 15px 0 rgb(0 0 0 / 2%),
+    0 0 20px 4px rgb(0 0 0 / 6%);
 }
+
+//   right: calc(50%-200px);
 
 .rightImage {
   height: 250px;
@@ -54,7 +58,8 @@
   left: -moz-calc(50% - 500px);
   left: calc(50% - 500px);
   top: 50px;
-  z-index: 1;
+  z-index: -1;
+  display: none;
   transition: all 1;
   opacity: 0;
 }
@@ -67,7 +72,8 @@
   left: -moz-calc(50% + 150px);
   left: calc(50% + 250px);
   top: 50px;
-  z-index: 1;
+  z-index: -1;
+  display: none;
   background-color: rgb(104, 77, 77);
   transition: all 1s;
 }

@@ -1,7 +1,7 @@
 export interface PlannedType {
     date: string;
     color: string
-    isDayOff: boolean
+    dayOff: boolean
     planned: [{
         id: number
         time: string

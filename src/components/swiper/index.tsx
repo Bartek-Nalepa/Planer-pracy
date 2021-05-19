@@ -6,8 +6,11 @@ import {connect} from "react-redux"
 import { SwiperPropsType } from "./index.type"
 import { momentFormat } from "../../config/ENV_CON"
 import Modal from "../modal"
-import { PlannedType } from "../../redux/planned/planned.type"
+import { PlannedType, SingleEventPlanned } from "../../redux/planned/planned.type"
 import { ReducerType } from "../../redux/reducer.type"
+import { element } from "prop-types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowCircleLeft, faArrowCircleRight } from "@fortawesome/free-solid-svg-icons";
 
 function Swiper(props: SwiperPropsType) {
 
@@ -15,15 +18,35 @@ function Swiper(props: SwiperPropsType) {
     const [getModalVisible, setModalVisible] = useState<boolean>(false)
     const [getModalDetails, setModalDetails] = useState<PlannedType>()
     const [getClickedDay, setClickedDay] = useState<string>('')
+    const [getClickedId, setClickedId] = useState<string>()
     const [getDays, setDays] = useState<any>()
 
     useEffect(() => {
         generateDays()
     }, [])
 
+    // "Update Card with new ul"
+    useEffect(() => {
+        planned.find((element: PlannedType) => element.date === getClickedDay)
+        const el = document?.getElementById(`${getClickedId}`)
+        el?.getElementsByTagName("ul")[0]?.remove()
+
+        let ul = document.createElement("ul")
+        const lis:PlannedType|undefined = planned?.find((item: PlannedType) => {
+            return item.date === getClickedDay
+        })
+        lis?.planned.forEach((element:SingleEventPlanned) => {
+            let li = document.createElement("li") 
+            li.append(element.message)
+            ul.append(li)
+        });
+        el?.append(ul)
+    }, [planned])
+
     const setDetails = (e:any) => {
         const day: string = e.currentTarget.getAttribute("day")
         setClickedDay(day)
+        setClickedId(e.currentTarget.getAttribute("id"))
         setModalDetails(
             planned.find((item: PlannedType) => {
                 return item.date === day
@@ -40,6 +63,8 @@ function Swiper(props: SwiperPropsType) {
         const center = document.getElementById("center")
         const right = document.getElementById("right")
         const rightVoid = document.getElementById("rightVoid")
+        const rightList = right?.getElementsByTagName('ul')[0];
+        const centerList = center?.getElementsByTagName('ul')[0];
         setCurrentDay(moment(getCurrentDay, momentFormat).add(1, 'days').format(momentFormat))
     
         leftVoid?.remove()
@@ -58,12 +83,33 @@ function Swiper(props: SwiperPropsType) {
         rightVoid?.classList.add("rightImage");
         rightVoid?.classList.remove("rightVoidImage")
         rightVoid?.setAttribute("id","right")
+        
+        rightList?.classList.add("cardList")
+        rightList?.classList.remove("smallerCardList")
+        centerList?.classList.add("smallerCardList")
+        centerList?.classList.remove("cardList")
+
         let div = document.createElement("div")
+        let h2 = document.createElement('h2')
+        let hr = document.createElement("hr")
+        let ul = document.createElement("ul")
+        const lis:PlannedType|undefined = planned?.find((item: PlannedType) => {
+            return item.date === moment(getCurrentDay,momentFormat).add(3, "days").format(momentFormat)
+        })
+        h2.append(moment(getCurrentDay,momentFormat).add(3, "days").format(momentFormat))
+        lis?.planned.forEach((element:SingleEventPlanned) => {
+            let li = document.createElement("li") 
+            li.append(element.message)
+            ul.append(li)
+        });
+        ul.classList.add("smallerCardList")
         div.id = "rightVoid"
         div.className = "rightVoidImage"
         div.setAttribute("day", `${moment(getCurrentDay, momentFormat).add(3,"days").format(momentFormat)}`)
-        container?.appendChild(div)
         div.onclick = (e:any) => setDetails(e)
+        div.append(h2,hr, ul)
+        container?.appendChild(div)
+        
     }
 
     function swipeRight(){ // CLICK LEFT
@@ -73,7 +119,8 @@ function Swiper(props: SwiperPropsType) {
         const center = document.getElementById("center")
         const right = document.getElementById("right")
         const rightVoid = document.getElementById("rightVoid")
-
+        const leftList = left?.getElementsByTagName('ul')[0];
+        const centerList = center?.getElementsByTagName('ul')[0];
         setCurrentDay(moment(getCurrentDay, momentFormat).subtract(1, 'days').format(momentFormat))
         rightVoid?.remove()
         
@@ -93,11 +140,32 @@ function Swiper(props: SwiperPropsType) {
         right?.classList.remove("rightImage")
         right?.setAttribute("id","rightVoid")
 
+        leftList?.classList.add("cardList")
+        leftList?.classList.remove("smallerCardList")
+        centerList?.classList.add("smallerCardList")
+        centerList?.classList.remove("cardList")
+
         let div = document.createElement("div")
+        let h2 = document.createElement('h2')
+        let hr = document.createElement("hr")
+        let ul = document.createElement("ul")
+        const lis:PlannedType|undefined = planned?.find((item: PlannedType) => {
+            return item.date === moment(getCurrentDay,momentFormat).subtract(3, "days").format(momentFormat)
+        })
+        h2.append(moment(getCurrentDay,momentFormat).subtract(3, "days").format(momentFormat))
+        lis?.planned.forEach((element:SingleEventPlanned) => {
+            let li = document.createElement("li") 
+            li.append(element.message)
+            ul.append(li)
+        });
+        ul.classList.add("smallerCardList")
         div.id = "leftVoid"
         div.className = "leftVoidImage"
         div.setAttribute("day", `${moment(getCurrentDay, momentFormat).subtract(3,"days").format(momentFormat)}`)
         div.onclick = (e:any) => setDetails(e)
+        div.append(h2,hr, ul)
+
+
         container?.appendChild(div)
     }
 
@@ -139,16 +207,38 @@ function Swiper(props: SwiperPropsType) {
                     return "rightVoidImage"
             }
         }
+        const listClassNames = (index:number) => {
+            if (index === 2) return "cardList"
+            else return "smallerCardList"
+
+        }
         setDays(
             countDays()?.map((item:any, index: number) => {
-                return <div key={index} id={`${id(index)}`} className={`${classNames(index)}`}>
-                    <p>{item}</p>
+                const cheatTs = {day: item}
+                const lis:PlannedType|undefined = planned?.find((element:PlannedType) => item === element.date)
+
+                return <div 
+                    {...cheatTs}
+                    key={index}
+                    id={`${id(index)}`} 
+                    className={`${classNames(index)}`}
+                    onClick={(e:any) => {setDetails(e)}}    
+                >
+                    <h2>{item}</h2>
+                    <hr/ >
+                    <ul className={`${listClassNames(index)}`}>
+                      {
+                          lis?.planned?.map((element: SingleEventPlanned) => {
+                            return <li>
+                                {element.message}
+                            </li>
+                          })
+                      }
+                    </ul>
                 </div>
             }) 
         )
     }
-
-
 
     return(
         <>
@@ -164,13 +254,12 @@ function Swiper(props: SwiperPropsType) {
             
             <div id={"sliderContainer"} className={style.sliderContainer}>
                 {getDays}
-                <button onClick={swipeRight}>
-                 LEFT
-                </button>
-                <button onClick={swipeLeft}>
-                    RIGHT
-                </button> 
             </div>
+            <div className={style.swiperBtnsContainer}>
+                <FontAwesomeIcon onClick={swipeRight} className={style.iconBtn} icon={faArrowCircleLeft} />
+                <FontAwesomeIcon onClick={swipeLeft} className={style.iconBtn} icon={faArrowCircleRight} />
+            </div>
+
         </>
     )
 }

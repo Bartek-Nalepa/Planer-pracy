@@ -19,7 +19,6 @@ function Planned(props:PlannerPropsType) {
 
   return(
     <div className={style.container}>
-        {getCurrentDay}
         <Swiper 
           getCurrentDay={getCurrentDay} 
           setCurrentDay={setCurrentDay}
