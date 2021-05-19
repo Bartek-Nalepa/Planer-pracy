@@ -190,3 +190,20 @@ h2{
   border-top: 85px solid transparent;
   border-left: 85px solid transparent;
 }
+
+@media screen and (max-width:425px) {
+  .centerImage {
+    width: 95vw;
+    left: 2.5vw;
+  }
+}
+
+@media screen and (max-width: 820px) {
+  .leftImage {
+    left: 2.5vw;
+  }
+  .rightImage {
+    left: initial;
+    right: 2.5vw;
+  }
+}
