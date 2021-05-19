@@ -5,7 +5,7 @@ export interface PlannedType {
     planned: [{
         id: number
         time: string
-        prio: number
+        prio: string
         message: string
         done: boolean
     }]
@@ -15,6 +15,6 @@ export interface SingleEventPlanned {
     id: number
     time: string
     message: string
-    prio: number
+    prio: string
     done: boolean
 }

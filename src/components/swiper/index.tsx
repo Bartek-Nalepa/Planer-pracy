@@ -8,7 +8,6 @@ import { momentFormat } from "../../config/ENV_CON"
 import Modal from "../modal"
 import { PlannedType, SingleEventPlanned } from "../../redux/planned/planned.type"
 import { ReducerType } from "../../redux/reducer.type"
-import { element } from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowCircleLeft, faArrowCircleRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -246,7 +245,7 @@ function Swiper(props: SwiperPropsType) {
                     <ul className={`${listClassNames(index)}`}>
                       {
                           lis?.planned?.map((element: SingleEventPlanned) => {
-                            return !element.done && <li>
+                            return !element.done && <li key={element.id}>
                                 {element.message}
                             </li>
                           })

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { SmallModalPropsType } from "./index.type"
 import style from "../index.module.scss"
 import moment from "moment"
@@ -13,7 +13,7 @@ const SmallModal = (props: SmallModalPropsType) => {
     const [getHours, setHours] = useState<string>(moment().format("HH"))
     const [getMinutes, setMinutes] = useState<string>(moment().format("mm"))
     const [getMessage, setMessage] = useState<string>() 
-    const [getPrio, setPrio] = useState<number>(2)
+    const [getPrio, setPrio] = useState<string>("2")
     const generateBottomButtons = () => {
         return <div className={style.flexRowBet}>
             <div className={style.prioContainer}>

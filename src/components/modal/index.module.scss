@@ -82,6 +82,7 @@
     padding-top: 0;
     margin-top: 0;
     font-family: Roboto, sans-serif;
+    white-space: pre-line;
   }
   .icon {
     cursor: pointer;
@@ -97,6 +98,10 @@
     &:hover {
       color: #6200ee;
     }
+  }
+  h3 {
+    margin-top: 0;
+    margin-bottom: 4px;
   }
 }
 
