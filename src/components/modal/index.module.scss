@@ -85,6 +85,15 @@
   }
   .icon {
     cursor: pointer;
+    &:nth-child(1) {
+      padding-right: 16px;
+      color: green;
+      font-size: 17px;
+    }
+    &:nth-child(2) {
+      margin-right: 8px;
+      color: gray;
+    }
     &:hover {
       color: #6200ee;
     }
@@ -182,6 +191,9 @@ input::-webkit-inner-spin-button {
   letter-spacing: 1px;
   border-radius: 4px;
   width: 175px;
+  &:hover {
+    background-color: darken(#6200ee, 5);
+  }
 }
 
 .btn {
@@ -198,6 +210,26 @@ input::-webkit-inner-spin-button {
   width: 175px;
   &:hover {
     background-color: lighten(#6200ee, 50);
+  }
+}
+
+.prioContainer {
+  margin-left: 8px;
+  font-family: Roboto, sans-serif;
+  label {
+    padding-right: 8px;
+  }
+  select {
+    height: 24px;
+    cursor: pointer;
+    border-radius: 4px;
+    border-color: #6200ee;
+    &:hover {
+      border-color: darken(#6200ee, 20);
+    }
+    &:focus-visible {
+      outline: none;
+    }
   }
 }
 

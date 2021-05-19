@@ -27,6 +27,7 @@ function Swiper(props: SwiperPropsType) {
 
     // "Update Card with new view"
     useEffect(() => {
+        console.log(planned)
         planned.find((element: PlannedType) => element.date === getClickedDay)
         const el = document?.getElementById(`${getClickedId}`)
         const triangle = el?.getElementsByClassName("triangle")[0]
@@ -37,13 +38,16 @@ function Swiper(props: SwiperPropsType) {
             return item.date === getClickedDay
         })
         lis?.planned.forEach((element:SingleEventPlanned) => {
+            if (element.done) return
             let li = document.createElement("li") 
             li.append(element.message)
             ul.append(li)
         });
         el?.append(ul)
         //@ts-ignore
-        if (triangle) triangle.style.borderTopColor = `${lis?.color}` || "transparent"
+        if (lis?.dayOff && triangle) triangle.style.borderTopColor = lis?.color ? `${lis?.color}` : "black"
+        //@ts-ignore
+        else if(triangle) {triangle.style.borderTopColor = "transparent"}
 
     }, [planned])
 
@@ -104,13 +108,14 @@ function Swiper(props: SwiperPropsType) {
         })
         h2.append(moment(getCurrentDay,momentFormat).add(3, "days").format(momentFormat))
         lis?.planned.forEach((element:SingleEventPlanned) => {
+            if (element.done) return
             let li = document.createElement("li") 
             li.append(element.message)
             ul.append(li)
         });
         ul.classList.add("smallerCardList")
         triangle.classList.add("triangle")
-        triangle.style.borderTopColor = `${lis?.color || "transparent"}`
+        triangle.style.borderTopColor = lis?.dayOff ? `${lis?.color || "black"}` : "transparent"
         div.id = "rightVoid"
         div.className = "rightVoidImage"
         div.setAttribute("day", `${moment(getCurrentDay, momentFormat).add(3,"days").format(momentFormat)}`)
@@ -158,14 +163,14 @@ function Swiper(props: SwiperPropsType) {
         })
         h2.append(moment(getCurrentDay,momentFormat).subtract(3, "days").format(momentFormat))
         lis?.planned.forEach((element:SingleEventPlanned) => {
+            if (element.done) return
             let li = document.createElement("li") 
             li.append(element.message)
             ul.append(li)
         });
         ul.classList.add("smallerCardList")
         triangle.classList.add("triangle")
-        triangle.style.borderTopColor = `${lis?.color || "transparent"}`
-        console.log(triangle)
+        triangle.style.borderTopColor = lis?.dayOff ? `${lis?.color || "black"}` : "transparent"
         div.id = "leftVoid"
         div.className = "leftVoidImage"
         div.setAttribute("day", `${moment(getCurrentDay, momentFormat).subtract(3,"days").format(momentFormat)}`)
@@ -231,13 +236,17 @@ function Swiper(props: SwiperPropsType) {
                     className={`${classNames(index)}`}
                     onClick={(e:any) => {setDetails(e)}}    
                 >
-                    <div style={lis?.color ? {borderTopColor: `${lis?.color}`}:{borderTopColor: "transparent"}} className={"triangle"} />
+                    { lis?.dayOff ? 
+                        <div style={lis?.color ? {borderTopColor: `${lis?.color}`}:{borderTopColor: "black"}} className={"triangle"} /> 
+                            :
+                        <div style={{borderTopColor: "transparent"}} className={"triangle"} /> 
+                    }
                     <h2>{item}</h2>
                     <hr/ >
                     <ul className={`${listClassNames(index)}`}>
                       {
                           lis?.planned?.map((element: SingleEventPlanned) => {
-                            return <li>
+                            return !element.done && <li>
                                 {element.message}
                             </li>
                           })

@@ -37,17 +37,19 @@ export default function plannedReducer(state = [], action: {type: string; payloa
         })
     }
 
-    // function removePlannedObjectInArray(array: PlannedType[], id: number){
-    //     let index: number
-    //     let newArray: PlannedType[] = array;
-    //     array.forEach((item: PlannedType, idx: number)=> {
-    //         index = item.planned.findIndex((el: SingleEventPlanned) => (el.id === id))
-    //         //@ts-ignore
-    //         newArray[idx].planned = newArray[idx].planned.filter((ele: SingleEventPlanned, idx2:number ) => idx2 !== index)
-    //     })
-    //     localStorage.setItem("planned", JSON.stringify(newArray))
-    //     return newArray
-    // }
+    function markAsDone(array:PlannedType[], action: {id:number} ){
+        let index: number
+        let newArray: PlannedType[] = state;
+        state.forEach((item: PlannedType, idx: number)=> {
+            index = item.planned.findIndex((el: SingleEventPlanned) => {
+                return el.id === action.id
+            })
+            if (index === -1) return
+            newArray[idx].planned[index].done = true
+        })
+        return [...newArray]
+        
+    }
 
     switch (action.type) {
         case actions.SET_PLANNER: 
@@ -96,6 +98,10 @@ export default function plannedReducer(state = [], action: {type: string; payloa
                 localStorage.setItem("planned", JSON.stringify(insertPlannedItem(state, action.payload)))
                 return insertPlannedItem(state, action.payload)
             }
+        case actions.SET_DONE:
+            const x = markAsDone(state, action.payload)
+            localStorage.setItem("planned", JSON.stringify(x))
+            return x
         case actions.SET_COLOR:
             const newNode2: any = state.findIndex((el:PlannedType) => {
                 return el.date === action.payload.date

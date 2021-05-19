@@ -4,7 +4,7 @@ import style from "./index.module.scss"
 import {ModalPropsType} from "./index.type" 
 import SmallModal from "./smallModal"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faBed, faTrash} from "@fortawesome/free-solid-svg-icons"
+import {faBed, faCheck, faTrash} from "@fortawesome/free-solid-svg-icons"
 import actions from "../../redux/planned/actions" 
 import {compose} from "recompose"
 import {connect} from "react-redux"
@@ -27,7 +27,7 @@ const Modal = (props:ModalPropsType) => {
         type: actions.REMOVE_PLANNER,
         payload: id
     })
-    const setDayOff = (date: string, dayOff:boolean) => {
+    const setDayOff = (date: string, dayOff: boolean) => {
         dispatch({
             type: actions.SET_DAYOFF,
             payload: {
@@ -36,18 +36,32 @@ const Modal = (props:ModalPropsType) => {
             }
         })
     }
+    const setAsDone = (id: number) => dispatch({
+        type: actions.SET_DONE,
+        payload: {
+            id
+        }
+    })
     const generatePlannedEvents = () => {
         const generateSingleEvent = (item:SingleEventPlanned[]) => {
             return item.map((el:SingleEventPlanned) => {
-                const {time, message, id} = el 
-                return <li key={id}>
+                const {time, message, id, done} = el 
+                return !done && <li key={id}>
                     <div className={style.timeContainer}> 
                         <p >{time && time} </p>
-                        <FontAwesomeIcon 
-                            className={style.icon}
-                            icon={faTrash}
-                            onClick={() => deleteEvent(id)}
-                        />
+                        <div>
+                            <FontAwesomeIcon 
+                                className={style.icon}
+                                icon={faCheck}
+                                onClick={() => setAsDone(id)}
+                            />
+                            <FontAwesomeIcon 
+                                className={style.icon}
+                                icon={faTrash}
+                                onClick={() => deleteEvent(id)}
+                            />
+                        </div>
+                        
                     </div>
                     <p className={style.message}>{message && message}</p>
                 </li>
@@ -71,7 +85,7 @@ const Modal = (props:ModalPropsType) => {
                 onClick={() => setDayOff(getClickedDay, !getPlanned?.dayOff )}>
                 {getPlanned?.dayOff ? 'Usuń wolny dzień' : "Ustaw wolny dzień" }
             </button>
-            <input type={"color"} onChange={(e:any) => setColor(e)}/>
+            <input style={{cursor: "pointer"}} type={"color"} onChange={(e:any) => setColor(e)}/>
             <div className={style.bottomContainer}>
                 <button onClick={() => setVisibleSmallModal(true)}>
                     Dodaj
@@ -93,7 +107,7 @@ const Modal = (props:ModalPropsType) => {
                 color: e.target.value
             }
         })
-    }, 500);
+    }, 250);
     }
     return (
         <>
