@@ -1,0 +1,253 @@
+@keyframes modalInit {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.backgroundModal {
+  animation: modalInit 0.5s ease;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.32);
+  z-index: 6;
+  inset: 0;
+}
+
+.backgroundSmallModal {
+  @extend .backgroundModal;
+  z-index: 12;
+}
+
+.modalContainer {
+  animation: modalInit 0.5s ease;
+  position: absolute;
+  top: 15vh;
+  left: calc(50% - 350px);
+  background-color: rgba(#ffffff, 1);
+  width: 700px;
+  max-height: 600px;
+  height: auto;
+  z-index: 10;
+  border-radius: 4px;
+  box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%),
+    0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%);
+  box-sizing: border-box;
+  max-width: 100%;
+  pointer-events: auto;
+  overflow-y: auto;
+}
+
+.smallModalContainer {
+  @extend .modalContainer;
+  width: 400px;
+  left: calc(50% - 200px);
+  top: 10vh;
+  height: 350px;
+  z-index: 13;
+}
+
+.title {
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 500;
+  font-size: 1.25rem;
+  padding: 0.25rem 24px 0.25rem;
+  letter-spacing: 0.0125em;
+}
+
+.noEvents {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  height: 400px;
+}
+
+.eventContainer {
+  padding: 1rem;
+  margin-left: 1rem;
+  list-style-type: circle;
+  .timeContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    p {
+      padding: 0;
+      margin: 0;
+      font-size: 14px;
+    }
+  }
+  .message {
+    padding-top: 0;
+    margin-top: 0;
+    font-family: Roboto, sans-serif;
+    white-space: pre-line;
+  }
+  .icon {
+    cursor: pointer;
+    &:nth-child(1) {
+      padding-right: 16px;
+      color: green;
+      font-size: 17px;
+    }
+    &:nth-child(2) {
+      margin-right: 8px;
+      color: gray;
+    }
+    &:hover {
+      color: #6200ee;
+    }
+  }
+  h3 {
+    margin-top: 0;
+    margin-bottom: 4px;
+  }
+}
+
+.bottomContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-flow: row nowrap;
+  padding: 4px 8px 8px;
+  button {
+    cursor: pointer;
+    color: #6200ee;
+    opacity: 0.88;
+    border: none;
+    background-color: transparent;
+    height: 36px;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-family: Roboto, sans-serif;
+    letter-spacing: 1px;
+    &:hover {
+      background-color: lighten(#6200ee, 50);
+    }
+    &:nth-child(2) {
+      margin-left: 8px;
+    }
+  }
+}
+
+.input {
+  margin: 0 4px;
+  width: 26px;
+  text-align: center;
+  font-size: 1rem;
+  &:focus-visible {
+    outline-color: #6300eea8;
+  }
+  &:active {
+    outline-color: #6200ee;
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.textArea {
+  display: block;
+  resize: none;
+  outline: none;
+  height: 178px;
+  border: none;
+  padding-left: 8px;
+  border-left: 1px solid black;
+  margin: auto;
+  width: 90%;
+}
+
+.hourContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.flexRowBet {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: wrap row;
+  align-items: center;
+
+  input[type="checkbox"] {
+    margin-right: 16px;
+    cursor: pointer;
+    &:checked {
+      margin-right: 16px;
+      background-color: #6200ee;
+    }
+  }
+}
+
+.buttonFilled {
+  cursor: pointer;
+  color: white;
+  opacity: 0.88;
+  border: none;
+  background-color: #6200ee;
+  height: 36px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: Roboto, sans-serif;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  width: 175px;
+  &:hover {
+    background-color: darken(#6200ee, 5);
+  }
+}
+
+.btn {
+  cursor: pointer;
+  color: #6200ee;
+  opacity: 0.88;
+  border: none;
+  background-color: transparent;
+  height: 36px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: Roboto, sans-serif;
+  letter-spacing: 1px;
+  width: 175px;
+  &:hover {
+    background-color: lighten(#6200ee, 50);
+  }
+}
+
+.prioContainer {
+  margin-left: 8px;
+  font-family: Roboto, sans-serif;
+  label {
+    padding-right: 8px;
+  }
+  select {
+    height: 24px;
+    cursor: pointer;
+    border-radius: 4px;
+    border-color: #6200ee;
+    &:hover {
+      border-color: darken(#6200ee, 20);
+    }
+    &:focus-visible {
+      outline: none;
+    }
+  }
+}
+
+@media screen and (max-width: 745px) {
+  .modalContainer {
+    width: 95vw;
+    left: 2.5vw;
+    right: 2.5vw;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .flexRowBet {
+    justify-content: space-around;
+  }
+}
